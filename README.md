@@ -120,7 +120,7 @@
         <description></description>
         <display-name>HelloServlet</display-name>
         <servlet-name>HelloServlet</servlet-name>
-        <servlet-class>example.HelloServlet</servlet-class>
+        <servlet-class>example.servlet.HelloServlet</servlet-class>
       </servlet>
       <servlet-mapping>
         <servlet-name>HelloServlet</servlet-name>
@@ -128,5 +128,3 @@
       </servlet-mapping>
       <!-- web.xml 내용 일부 -->
       ```
-
-### 자바 웹 애플리케이션의 폴더 구조
