@@ -18,5 +18,24 @@
 
     <display-name>Archetype Created Web Application</display-name>
 
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <description></description>
+        <display-name>OldTenServlet</display-name>
+        <servlet-name>OldTenServlet</servlet-name>
+        <servlet-class>example.servlet.OldTenServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OldTenServlet</servlet-name>
+        <url-pattern>/oldTen</url-pattern>
+    </servlet-mapping>
 </web-app>
 
