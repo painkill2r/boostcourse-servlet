@@ -27,15 +27,18 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 
+    <!-- Servlet 3.0 미만 Spec에서 XML를 사용한 Servlet 등록 -->
+    <!-- Servlet 3.0 이상 Spec에서는 아래 과정을 애노테이션(@WebServlet)을 사용하여 설정한다. -->
     <servlet>
         <description></description>
         <display-name>OldTenServlet</display-name>
-        <servlet-name>OldTenServlet</servlet-name>
-        <servlet-class>example.servlet.OldTenServlet</servlet-class>
+        <servlet-name>OldTenServlet</servlet-name><!-- servlet-mapping에서 servlet-name과 동일하게 설정 -->
+        <servlet-class>example.servlet.OldTenServlet</servlet-class><!-- 실제로 실행할 클래스 -->
     </servlet>
     <servlet-mapping>
         <servlet-name>OldTenServlet</servlet-name>
         <url-pattern>/oldTen</url-pattern>
     </servlet-mapping>
+
 </web-app>
 
