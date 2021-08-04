@@ -1,1 +1,7 @@
-example/HelloServlet.class
+example/servlet/TenServlet.class
+example/servlet/request/RequestParameterServlet.class
+example/servlet/request/RequestInfoServlet.class
+example/servlet/OldTenServlet.class
+example/servlet/LifeCycleServlet.class
+example/servlet/request/RequestHeaderServlet.class
+example/servlet/HelloServlet.class
