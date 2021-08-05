@@ -265,7 +265,7 @@
 1. 웹 어플리케이션이 시작되고 종료될 때까지 변수를 사용할 수 있다.
 2. `ServletContext 인터페이스`를 구현한 객체를 사용한다.
 3. JSP에서는 `application` 내장객체를 이용한다.
-4. 서블릿의 경우는 `getServletContext() 메소드를 이용하여 application객체를 이용`한다.
+4. 서블릿의 경우는 `getServletContext() 메소드를 이용하여 application 객체를 이용`한다.
 5. `웹 어플리케이션 하나당 하나`의 application 객체가 사용된다.
 6. 값을 저장할 때는 application객체의 `setAttribute()` 메소드를 사용한다.
 7. 값을 읽어 들일 때는 application객체의 `getAttribute()` 메소드를 사용한다.
