@@ -195,3 +195,78 @@
     - 서블릿 코드를 컴파일해서 실행 가능한 bytecode로 변환한다.(.class 파일 생성)
     - 서블릿 클래스를 로딩하고 인스턴스를 생성한다.
 5. 서블릿이 실행되어 요청을 처리하고 응답 정보를 생성한다.
+
+### JSP 내장객체
+
+1. JSP를 실행하면 `서블릿 소스`가 생성되고 실행된다.
+2. JSP에 입력한 대부분의 코드는 생성되는 서블릿 소스의 `_jspService() 메소드` 안에 삽입되는 코드로 생성된다.
+3. _jspService() 안에 삽입된 코드의 윗부분에 미리 선언된 객체들이 있는데, 해당 객체들은 JSP에서도 사용 가능하다.
+4. `request, response, session, application, out과 같은 변수를 JSP 내장 객체라고 한다.`
+5. 다음은 JSP 내장객체 주요 역할을 표로 정리해 보았다.
+
+|**내장객체**|**자바 클래스**|**주요 역할**|
+|:----:|:----|:----|
+|request|javax.servlet.http.HttpServletRequest|HTML Form 요소 선택 값과 같은 사용자 입력 정보를 읽어 올 때 사용|
+|response|javax.servlet.http.HttpServletResponse|사용자 요청에 대한 응답을 처리할 때 사용|
+|pageContext|javax.servlet.jsp.PageContext|현재 JSP 실행에 대한 context 정보를 참조하기 위해 사용|
+|session|javax.servlet.http.HttpSession|클라이언트 세션 정보를 처리하기 위해 사용|
+|application|javax.servlet.ServletContext|웹 서버의 애플리케이션 처리와 관련된 정보를 참조하기 위해 사용|
+|out|javax.servlet.jsp.JspWriter|사용자에게 전달하기 위핸 OutPut 스트림을 처리하기 위해 사용|
+|config|javax.servlet.ServletConfig|현재 JSP에 대한 초기화 환경을 처리하기 위해 사용|
+|page|javax.servlet.HttpJspPage|현재 JSP 페이지에 대한 클래스 정보|
+|exception|java.lang.Throwable|예외 처리를 위해 사용|
+
+### Scope
+
+1. Scope는 약속된 객체들의 사용 범위이다.
+2. 다음 4가지 Scope이 있다.
+    - `Application`: 웹 어플리케이션이 시작되고 종료될 때까지 변수가 유지되는 경우 사용.
+    - `Session`: 웹 브라우저 별로 변수가 관리되는 경우 사용.
+        - 상태 유지에 사용.
+    - `Request`: HTTP 요청을 WAS가 받아서 웹 브라우저에게 응답할 때까지 변수가 유지되는 경우 사용.
+    - `Page`: 페이지 내에서 지역변수 처럼 사용.
+      ![Request, Response 객체 전달 과정](images/servlet04.png)
+
+#### Page Scope
+
+1. `PageContext 추상 클래스`를 사용한다.
+2. JSP에서 `pageContext` 내장객체로 사용 가능하다.
+3. `forward`가 될 경우 해당 Page Scope에 지정된 변수는 사용할 수 없다.
+4. 마치 지역 변수처럼 사용된다는 것이 다른 Scope들과 다른 점이다.
+5. 사용 예)
+    - JSP에서 Page Scope에 값을 저장한 후 해당 값을 `EL 표기법` 등에서 사용될 때 사용한다.
+    - 지역 변수처럼 해당 JSP나 서블릿이 실행되는 동안에만 정보가 유지되고자 할 때 사용한다.
+
+#### Request Scope
+
+1. HTTP 요청을 WAS가 받아서 웹 브라우저에게 응답할 때까지 변수값을 유지하고자 할 경우 사용한다.
+2. `HttpServletRequest 객체`를 사용한다.
+3. JSP에서는 `request` 내장객체를 사용한다.
+4. 서블릿에서는 `HttpServletRequest 객체`를 사용한다.
+5. 값을 저장할 때는 request 객체의 `setAttribute()` 메소드를 사용한다.
+6. 값을 읽어 들일 때는 request 객체의 `getAttribute()` 메소드를 사용한다.
+7. `forward 시 값을 유지하고자 사용한다.`
+8. 앞에서 forward에 대하여 배울 때 forward 하기 전에 request 객체의 setAttribute() 메소드로 값을 설정한 후, 서블릿이나 JSP에 결과를 전달하여 값을 출력하도록 하였는데 이렇게
+   forward 되는 동안 값이 유지되는 것이 Request Scope를 이용했다고 한다.
+
+#### Session Scope
+
+1. 웹 브라우저별로 변수를 관리하고자 할 경우 사용한다.
+2. `웹 브라우저간의 탭 간에는 세션정보가 공유`되기 때문에, 각각의 탭에서는 같은 세션정보를 사용할 수 있다.
+3. `HttpSession 인터페이스`를 구현한 객체를 사용한다.
+4. JSP에서는 `session` 내장객체를 사용한다.
+5. 서블릿에서는 `HttpServletRequest의 getSession()메소드를 이용하여 session 객체를 얻는다.`
+6. 값을 저장할 때는 session 객체의 `setAttribute()` 메소드를 사용한다.
+7. 값을 읽어 들일 때는 session 객체의 `getAttribute()` 메소드를 사용한다.
+8. 장바구니처럼 사용자별로 유지가 되어야 할 정보가 있을 때 사용한다.
+
+#### Application Scope
+
+1. 웹 어플리케이션이 시작되고 종료될 때까지 변수를 사용할 수 있다.
+2. `ServletContext 인터페이스`를 구현한 객체를 사용한다.
+3. JSP에서는 `application` 내장객체를 이용한다.
+4. 서블릿의 경우는 `getServletContext() 메소드를 이용하여 application객체를 이용`한다.
+5. `웹 어플리케이션 하나당 하나`의 application 객체가 사용된다.
+6. 값을 저장할 때는 application객체의 `setAttribute()` 메소드를 사용한다.
+7. 값을 읽어 들일 때는 application객체의 `getAttribute()` 메소드를 사용한다.
+8. `모든 클라이언트가 공통으로 사용해야 할 값들이 있을 때 사용한다.`
