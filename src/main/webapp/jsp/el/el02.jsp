@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%-- EL을 무시하고 싶은 경우 아래 지시자를 사용 --%>
+<%--<%@ page isELIgnored="true" %>--%>
 <%
     request.setAttribute("k", 10);
     request.setAttribute("m", true);
