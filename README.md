@@ -225,7 +225,7 @@
         - 상태 유지에 사용.
     - `Request`: HTTP 요청을 WAS가 받아서 웹 브라우저에게 응답할 때까지 변수가 유지되는 경우 사용.
     - `Page`: 페이지 내에서 지역변수 처럼 사용.
-      ![Request, Response 객체 전달 과정](images/servlet04.png)
+      ![Scope](images/servlet04.png)
 
 #### Page Scope
 
@@ -270,3 +270,109 @@
 6. 값을 저장할 때는 application객체의 `setAttribute()` 메소드를 사용한다.
 7. 값을 읽어 들일 때는 application객체의 `getAttribute()` 메소드를 사용한다.
 8. `모든 클라이언트가 공통으로 사용해야 할 값들이 있을 때 사용한다.`
+
+## EL(Expression Language)
+
+1. `EL`은 값을 표현하는 데 사용되는 스크립트 언어로서 JSP의 기본 문법을 보완하는 역할을 한다.
+2. EL은 JSP의 `스크립트(스크립트릿, 표현식, 선언식, 지시자) 요소`를 제외한 나머지 부분에서 사용할 수 있다.
+3. 표현 방법
+    - `${expr}`
+   ```html
+   <b>${sessionScope.member.id}님 환영합니다.</b>
+   ```
+3. 참고링크: [https://www.javatpoint.com/EL-expression-in-jsp](https://www.javatpoint.com/EL-expression-in-jsp)
+
+### EL이 제공하는 기능
+
+1. JSP의 Scope에 맞는 속성 사용
+2. 집합 객체에 대한 접근 방법 제공
+3. 수치 연산, 관계 연산, 논리 연산자 제공
+4. 자바 클래스 메소드 호출 기능 제공
+5. 기본 객체 제공
+
+### EL이 제공하는 기본 객체
+
+|기본 객체|설명|
+|:----:|:----|
+|pageContext|JSP의 page 내장객체와 동일|
+|pageScope|pageContext 내장객체에 저장된 속성의 <속성, 값> 매핑을 저장한 Map 객체|
+|requestScope|request 내장객체에 저장된 속성의 <속성, 값> 매핑을 저장한 Map 객체|
+|sessionScope|session 내장객체에 저장된 속성의 <속성, 값> 매핑을 저장한 Map 객체|
+|applicationScope|application 내장객체에 저장된 속성의 <속성, 값> 매핑을 저장한 Map 객체|
+|param|요청 파라미터의 <파라미터명, 값> 매핑을 저장한 Map 객체, `String` 타입, `request.getParameter("name")`와 동일|
+|paramValues|요청 파라미터의 <파라미터명, 값 배열> 매핑을 저장한 Map 객체, `String[]` 타입, `request.getParameterValues("name")`와 동일|
+|header|요청 정보의 <헤더 이름, 값> 매핑을 저장한 Map 객체, `request.getHeader("name")`과 동일|
+|headerValues|요청 정보의 <헤더 이름, 값 배열> 매핑을 저장한 Map 객체, `request.getHeaders("name")`과 동일|
+|cookie|<쿠키 이름, Cookie> 매핑을 저장한 Map 객체, `request.getCookies()`로 구한 Cookie 배열로 부터 매핑을 생성|
+|initParam|초기화 파라미터의 <이름, 값> 매핑을 저장한 Map 객체, `application.getInitParamter("이름")`과 동일|
+
+- 기본 객체 사용 (예)
+
+```html
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%-- EL 비활성화시 아래 코드 주석을 해제한다. --%>
+<%-- <%@ page isELIgnored = "true" %> --%>
+<%
+request.setAttribute("name", "홍길동")
+%>
+<html>
+<head>
+    <title>EL 기본 객체 사용</title>
+</head>
+<body>
+요청 URI: ${pageContext.request.requestURI} == pageContext.getRequest().getRequestURI()
+request의 name 속성: ${request.name} == request.getAttribute("name")
+code 파라미터: ${param.code} == request.getParamter("code")
+</body>
+</html>
+```
+
+### EL 사용방법
+
+1. `${표현1.표현2}` 객체 접근 규칙
+    - 표현 1이나 표현 2가 NULL이면 NULL을 반환한다.
+    - 표현1이 `Map`일 경우 `표현2`를 key로한 값을 반환한다.
+    - 표현1이 `List나 배열`이면 표현2가 `정수`일 경우 해당 정수 번째 index에 해당하는 값을 반환한다.
+        - 만약 정수가 아닐 경우에는 오류가 발생한다.
+    - 표현1이 객체일 경우는 표현2에 해당하는 `Getter 메소드`에 해당하는 메소드를 호출한 결과를 반환한다.
+
+2. 수치 연산자
+    - `+` : 덧셈
+    - `-` : 뺄셈
+    - `*` : 곱셈
+    - `/` 또는 `div` : 나눗셈
+    - `%` 또는 `mod` : 나머지
+    - 숫자가 아닌 객체와 수치 연산자를 사용할 경우 객체를 숫자 값으로 변환 후 연산자를 수행
+        - `${"10" + 1} → ${10 + 1}`
+    - 숫자로 변환할 수 없는 객체와 수치 연산자를 함께 사용하면 에러를 발생
+        - `${"문자열" + 1} → 에러`
+    - 수치 연산자에서 사용되는 객체가 `NULL`이면 `0`으로 처리
+        - `${null + 1} → ${0 + 1}`
+
+3. 비교 연산자
+    - `==` 또는 `eq`
+    - `!=` 또는 `ne`
+    - `<` 또는 `lt`
+    - `>` 또는 `gt`
+    - `<=` 또는 `le`
+    - `>=` 또는 `ge`
+    - 문자열 비교
+        - `${str == '값'} → str.compareTo("값") == 0와 동일`
+
+4. 논리 연산자
+    - `&&` 또는 `and`
+    - `||` 또는 `or`
+    - `!` 또는 `not`
+
+5. `empty` 연산자
+    - `${empty 값}`
+        - 값이 `NULL`이면 true를 리턴
+        - 값이 `빈 문자열("")`이면 true를 리턴
+        - 값이 `길이가 0인 배열`이면 true를 리턴
+        - 값이 `빈 Map`이면 true를 리턴
+        - 값이 `빈 Collection`이면 true를 리턴
+        - `이 외의 경우에는 false를 리턴`
+
+6. 비교 선택 연산자
+    - `${<수식> ? <값1> : <값2>}`
+        - 수식의 결과 값이 true이면 값1을 리턴하고, false이면 값2를 리턴
