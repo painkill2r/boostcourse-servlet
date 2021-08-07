@@ -98,7 +98,7 @@
 
 1. WAS에서 동작하는 JAVA 클래스이며, 자바 웹 어플리케이션의 구성요소 중 동적인 처리를 하는 프로그램의 역할을 한다.
     - 자바 웹 어플리케이션 디렉토리 구조
-      ![자바 웹 어플리케이션 디렉토리 구조](images/servlet01.png)
+      ![자바 웹 어플리케이션 디렉토리 구조](images/servlet/servlet01.png)
 2. Servlet 구현시에는 `HttpServlet` 클래스를 상속받아야 한다.
 
 ### Servlet 작성 방법
@@ -131,7 +131,7 @@
 
 ### Servlet 생명주기(Life Cycle)
 
-![서블릿 생명주기](images/servlet02.png)
+![서블릿 생명주기](images/servlet/servlet02.png)
 
 1. WAS는 서블릿 요청을 받으면 해당 서블릿이 메모리에 있는지 확인한다.
 2. 만약, 메모리에 없으면, 해당 서블릿을 메모리에 올린다.
@@ -155,7 +155,7 @@
 1. WAS는 웹 브라우저로부터 Servlet 요청을 받으면, 요청할 때 가지고 있는 정보를 `HttpServletRequest` 객체를 생성하여 저장한다.
 2. 또한, 웹 브라우저로 응답을 보낼 때 사용하기 위해 `HttpServletResponse` 객체를 생성한다.
 3. 이렇게 생성된 `HttpServletRequest`, `HttpServletResponse` 객체를 서블릿에게 전달한다.
-   ![Request, Response 객체 전달 과정](images/servlet03.png)
+   ![Request, Response 객체 전달 과정](images/servlet/servlet03.png)
 
 ### HttpServletRequest
 
@@ -225,7 +225,7 @@
         - 상태 유지에 사용.
     - `Request`: HTTP 요청을 WAS가 받아서 웹 브라우저에게 응답할 때까지 변수가 유지되는 경우 사용.
     - `Page`: 페이지 내에서 지역변수 처럼 사용.
-      ![Scope](images/servlet04.png)
+      ![Scope](images/servlet/servlet04.png)
 
 #### Page Scope
 
@@ -376,3 +376,121 @@ code 파라미터: ${param.code} == request.getParamter("code")
 6. 비교 선택 연산자
     - `${<수식> ? <값1> : <값2>}`
         - 수식의 결과 값이 true이면 값1을 리턴하고, false이면 값2를 리턴
+
+## JSTL(JSP Standard Tag Library)
+
+1. `JSTL`은 JSP 페이지에서 조건문 처리, 반복문 처리 등을 HTML 형태로 작성할 수 있게 도와준다.
+    - JSP 안에서 Java 코드를 없에고 태그 형태로 표현할 수 있다.
+      ![JSTL 사용(예)](images/jstl/jstl01.png)
+
+### JSTL 태그 종류
+
+|라이브러리|하위 기능|접두어|관련 URL|
+|:----:|:----|:----:|:----|
+|코어|변수지원, 흐름 제어, URL 처리|c|http://java.sun.com/jsp/jstl/core|
+|XML|XML 코어, 흐름 제어, XML 변환|x|http://java.sun.com/jsp/jstl/xml|
+|국제화|지역, 메시지 형식, 숫자 및 날짜 형식|fmt|http://java.sun.com/jsp/jstl/fmt|
+|데이터베이스|SQL|sql|http://java.sun.com/jsp/jstl/sql|
+|함수|콜렉션 처리, String 처리|fn|http://java.sun.com/jsp/jstl/functions|
+
+### JSTL 코어 태그
+
+<table>
+   <thead>
+      <tr>
+         <th>기능분류</th>
+         <th>태그</th>
+         <th>설명</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td rowspan="2">변수 지원</td>
+         <td>set</td>
+         <td>JSP에서 사용될 변수를 설정한다.</td>
+      </tr>   
+      <tr>
+         <td>remove</td>
+         <td>설정한 변수를 제거한다.</td>
+      </tr>
+      <tr>
+         <td rowspan="4">흐름 제어</td>
+         <td>if</td>
+         <td>조건에 따라 내부 코드를 수행한다.</td>
+      </tr>   
+      <tr>
+         <td>choose</td>
+         <td>다중 조건을 처리할 때 사용한다.</td>
+      </tr>
+      <tr>
+         <td>forEach</td>
+         <td>콜렉션이나 Map의 각 항목을 처리할 때 사용한다.</td>
+      </tr>
+      <tr>
+         <td>forTokens</td>
+         <td>구분자로 분리된 각각의 토큰을 처리할 때 사용한다.</td>
+      </tr>
+      <tr>
+         <td rowspan="3">URL 처리</td>
+         <td>import</td>
+         <td>URL을 사용하여 다른 자원의 결과를 삽입한다.</td>
+      </tr>   
+      <tr>
+         <td>redirect</td>
+         <td>지정한 경로로 리다이렉트 한다.</td>
+      </tr>
+      <tr>
+         <td>url</td>
+         <td>URL을 재작성 한다.</td>
+      </tr>
+      <tr>
+         <td rowspan="2">기타 태그</td>
+         <td>catch</td>
+         <td>예외 처리에 사용된다.</td>
+      </tr>   
+      <tr>
+         <td>out</td>
+         <td>JspWriter에 내용을 알맞게 처리한 후 출력한다.</td>
+      </tr>
+   </tbody>
+</table>
+
+### 코어 태그
+
+1. 변수 지원
+    - `set`: 변수 설정
+        - 지정한 Scope 영역에 변수를 생성한다.
+         ```html
+         <c:set var="varName" scope="session" value="someValue"/>
+         <c:set var="varName" scope="request">someValue</c:set>
+         ```
+        - `var`: EL에서 사용될 변수명
+        - `scope`: 변수가 저장될 Scope 영역(page, request, session, application / 생략 가능하며, 생략 시 기본 값은 page로 설정된다.)
+        - `value`: 변수값
+    - `remove`: 변수 제거
+      ```html
+      <c:remove var="varName" scope="request"/>
+      ```
+    - 프로퍼티, Map 처리
+      ```html
+      <c:set target="${some}" property="propertyName" value="anyValue"/>
+      ```
+        - some 객체가 자바 빈일 경우
+            - some.setProperty(anyValue)
+        - some 객체가 Map인 경우
+            - some.put(propertyName, anyValue)
+2. 흐름 제어
+    - `<c:if></c:if>`
+      ![JSTL 사용(예)](images/jstl/jstl02.png)
+    - `<c:choose></c:choose>`
+      ![JSTL 사용(예)](images/jstl/jstl03.png)
+    - `<c:forEach></c:forEach>`
+      ![JSTL 사용(예)](images/jstl/jstl04.png)
+    - `<c:import url="url" var="varName"/>`
+      ![JSTL 사용(예)](images/jstl/jstl05.png)
+    - `<c:redirect url="url"/>`
+      ![JSTL 사용(예)](images/jstl/jstl06.png)
+3. 기타 태그
+    - `out`
+        - JspWriter에 데이터를 출력한다.
+          ![JSTL 사용(예)](images/jstl/jstl07.png)
